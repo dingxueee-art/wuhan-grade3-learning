@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="江城智学伴——武汉小学三年级数学英语定制学习系统" />
+  <title>江城智学伴｜武汉小学三年级数学英语版</title>
+  <style>
+    :root{
+      --bg:#f4f7fb;--panel:#ffffff;--panel2:#f8fafc;--text:#172033;--muted:#718096;
+      --line:#e5eaf2;--primary:#2878e8;--primary2:#5db7ff;--success:#16a36a;
+      --warn:#f59e0b;--danger:#e5484d;--shadow:0 10px 30px rgba(31,48,82,.08);
+      --radius:18px;
+    }
+    [data-theme="dark"]{
+      --bg:#0f1420;--panel:#171e2c;--panel2:#20293a;--text:#eef3ff;--muted:#9eabc2;
+      --line:#2b3548;--primary:#7795ff;--primary2:#9cb2ff;--shadow:0 12px 30px rgba(0,0,0,.25);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;background:var(--bg);color:var(--text);
+      font-family:"Microsoft YaHei","PingFang SC","Noto Sans CJK SC",Arial,sans-serif;
+      min-height:100vh;
+    }
+    button,input,select,textarea{font:inherit}
+    button{cursor:pointer}
+    .app{display:grid;grid-template-columns:240px 1fr;min-height:100vh}
+    .sidebar{
+      background:var(--panel);border-right:1px solid var(--line);padding:22px 16px;
+      position:sticky;top:0;height:100vh;overflow:auto;z-index:10
+    }
+    .brand{display:flex;align-items:center;gap:12px;padding:4px 8px 22px}
+    .brand-mark{
+      width:44px;height:44px;border-radius:14px;display:grid;place-items:center;
+      color:white;font-size:23px;background:linear-gradient(135deg,var(--primary),#8d6bff);
+      box-shadow:0 8px 18px rgba(65,105,225,.26)
+    }
+    .brand h1{font-size:18px;margin:0}.brand p{font-size:12px;margin:4px 0 0;color:var(--muted)}
+    .role-switch{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;background:var(--panel2);padding:5px;border-radius:13px;margin-bottom:18px}
+    .role-switch button{border:0;background:transparent;color:var(--muted);padding:8px 4px;border-radius:9px;font-size:13px}
+    .role-switch button.active{background:var(--panel);color:var(--primary);box-shadow:0 2px 8px rgba(0,0,0,.07)}
+    .nav{display:grid;gap:7px}
+    .nav button{
+      border:0;background:transparent;color:var(--muted);text-align:left;padding:12px 14px;
+      border-radius:12px;display:flex;align-items:center;gap:11px
+    }
+    .nav button:hover{background:var(--panel2);color:var(--text)}
+    .nav button.active{background:rgba(65,105,225,.12);color:var(--primary);font-weight:700}
+    .nav .icon{width:22px;text-align:center}
+    .side-footer{margin-top:22px;padding:14px;border-radius:14px;background:var(--panel2);font-size:12px;color:var(--muted);line-height:1.7}
+    .main{min-width:0}
+    .topbar{
+      height:76px;background:rgba(255,255,255,.78);backdrop-filter:blur(14px);
+      border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;
+      padding:0 28px;position:sticky;top:0;z-index:8
+    }
+    [data-theme="dark"] .topbar{background:rgba(23,30,44,.82)}
+    .mobile-menu{display:none;border:0;background:var(--panel2);color:var(--text);width:40px;height:40px;border-radius:12px}
+    .top-title h2{margin:0;font-size:21px}.top-title p{margin:4px 0 0;color:var(--muted);font-size:13px}
+    .top-actions{display:flex;align-items:center;gap:10px}
+    .ghost-btn,.primary-btn,.danger-btn,.success-btn{
+      border-radius:11px;padding:10px 14px;border:1px solid var(--line);background:var(--panel);color:var(--text)
+    }
+    .primary-btn{border-color:var(--primary);background:var(--primary);color:white}
+    .success-btn{border-color:var(--success);background:var(--success);color:white}
+    .danger-btn{border-color:var(--danger);background:var(--danger);color:white}
+    .content{padding:26px;max-width:1480px;margin:auto}
+    .page{display:none}.page.active{display:block}
+    .hero{
+      padding:24px;border-radius:24px;color:white;position:relative;overflow:hidden;
+      background:linear-gradient(135deg,#1877e8 0%,#20a4d8 58%,#46b978 100%);
+      box-shadow:var(--shadow);margin-bottom:20px
+    }
+    .hero:after{content:"";position:absolute;width:260px;height:260px;border:60px solid rgba(255,255,255,.08);border-radius:50%;right:-80px;top:-110px}
+    .hero h3{font-size:24px;margin:0 0 8px}.hero p{margin:0;opacity:.9;max-width:720px;line-height:1.7}
+    .hero-row{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;position:relative;z-index:1}
+    .hero-actions{display:flex;gap:10px;flex-wrap:wrap}
+    .hero .ghost-btn{background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.28);color:white}
+    .grid{display:grid;gap:18px}.metrics{grid-template-columns:repeat(4,1fr);margin-bottom:18px}
+    .two-col{grid-template-columns:minmax(0,1.55fr) minmax(300px,.8fr)}
+    .three-col{grid-template-columns:repeat(3,1fr)}
+    .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px}
+    .metric{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:17px;display:flex;gap:14px;align-items:center}
+    .metric-icon{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:rgba(65,105,225,.12);font-size:22px}
+    .metric small{color:var(--muted)}.metric strong{display:block;font-size:24px;margin-top:4px}
+    .section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:15px}
+    .section-head h3{margin:0;font-size:17px}.section-head p{margin:4px 0 0;color:var(--muted);font-size:13px}
+    .chip{display:inline-flex;align-items:center;gap:6px;border-radius:999px;background:rgba(65,105,225,.11);color:var(--primary);padding:6px 10px;font-size:12px;font-weight:700}
+    .course-list,.task-list,.wrong-list{display:grid;gap:11px}
+    .course{
+      padding:14px;border:1px solid var(--line);border-radius:14px;background:var(--panel2);
+      display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center
+    }
+    .course h4{margin:0 0 5px;font-size:15px}.course p{margin:0;color:var(--muted);font-size:12px}
+    .progress{height:9px;background:var(--line);border-radius:999px;overflow:hidden;margin-top:10px}
+    .progress span{display:block;height:100%;background:linear-gradient(90deg,var(--primary),var(--primary2));border-radius:inherit}
+    .task{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px;border:1px solid var(--line);border-radius:13px}
+    .task-left{display:flex;align-items:center;gap:11px}
+    .task input{width:18px;height:18px;accent-color:var(--primary)}
+    .task.done .task-name{text-decoration:line-through;color:var(--muted)}
+    .task small{color:var(--muted)}
+    .bar-list{display:grid;gap:14px}.bar-row{display:grid;grid-template-columns:110px 1fr 48px;gap:10px;align-items:center;font-size:13px}
+    .bar{height:10px;background:var(--line);border-radius:999px;overflow:hidden}.bar span{display:block;height:100%;background:var(--primary);border-radius:inherit}
+    .quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+    .quick{
+      border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:15px;padding:16px;text-align:left
+    }
+    .quick:hover{border-color:var(--primary);transform:translateY(-1px)}
+    .quick b{display:block;margin-top:8px}.quick small{color:var(--muted)}
+    .quiz-wrap{max-width:860px;margin:auto}
+    .quiz-meta{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:14px}
+    .question-card{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:24px;box-shadow:var(--shadow)}
+    .question-title{font-size:20px;line-height:1.7;margin:12px 0 20px}
+    .options{display:grid;gap:11px}
+    .option{
+      width:100%;text-align:left;border:1px solid var(--line);background:var(--panel2);color:var(--text);
+      border-radius:14px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start
+    }
+    .option:hover{border-color:var(--primary)}.option.selected{border-color:var(--primary);background:rgba(65,105,225,.11)}
+    .option.correct{border-color:var(--success);background:rgba(22,163,106,.1)}
+    .option.wrong{border-color:var(--danger);background:rgba(229,72,77,.09)}
+    .option-letter{width:28px;height:28px;border-radius:9px;background:var(--panel);display:grid;place-items:center;font-weight:700;flex:0 0 auto}
+    .explanation{margin-top:16px;padding:16px;border-left:4px solid var(--primary);background:rgba(65,105,225,.08);border-radius:10px;line-height:1.75}
+    .quiz-actions{display:flex;justify-content:space-between;gap:12px;margin-top:18px;flex-wrap:wrap}
+    .form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+    .form-item{display:grid;gap:7px}.form-item.full{grid-column:1/-1}
+    label{font-size:13px;color:var(--muted)}
+    input[type=text],input[type=number],input[type=password],select,textarea{
+      width:100%;border:1px solid var(--line);border-radius:11px;background:var(--panel2);color:var(--text);padding:11px 12px;outline:none
+    }
+    textarea{min-height:94px;resize:vertical}
+    input:focus,select:focus,textarea:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(65,105,225,.12)}
+    .table-wrap{overflow:auto;border:1px solid var(--line);border-radius:14px}
+    table{width:100%;border-collapse:collapse;min-width:760px;background:var(--panel)}
+    th,td{padding:12px 13px;border-bottom:1px solid var(--line);text-align:left;font-size:13px;vertical-align:top}
+    th{background:var(--panel2);color:var(--muted);font-weight:700}
+    tr:last-child td{border-bottom:0}
+    .status{display:inline-flex;padding:4px 8px;border-radius:999px;font-size:12px;font-weight:700}
+    .status.ok{background:rgba(22,163,106,.12);color:var(--success)}
+    .status.warn{background:rgba(245,158,11,.13);color:var(--warn)}
+    .status.bad{background:rgba(229,72,77,.12);color:var(--danger)}
+    .empty{text-align:center;color:var(--muted);padding:34px 12px}
+    .wrong-card{padding:16px;border:1px solid var(--line);border-radius:14px;background:var(--panel)}
+    .wrong-card h4{margin:0 0 8px;line-height:1.6}.wrong-card p{margin:5px 0;color:var(--muted);font-size:13px;line-height:1.6}
+    .wrong-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+    .chat{
+      display:grid;grid-template-rows:1fr auto;height:560px;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:var(--panel)
+    }
+    .messages{padding:18px;overflow:auto;display:grid;align-content:start;gap:12px;background:linear-gradient(180deg,var(--panel2),var(--panel))}
+    .msg{max-width:82%;padding:12px 14px;border-radius:14px;line-height:1.7;font-size:14px;white-space:pre-wrap}
+    .msg.user{justify-self:end;background:var(--primary);color:white;border-bottom-right-radius:4px}
+    .msg.ai{justify-self:start;background:var(--panel2);border:1px solid var(--line);border-bottom-left-radius:4px}
+    .chat-input{display:grid;grid-template-columns:1fr auto;gap:10px;padding:12px;border-top:1px solid var(--line)}
+    .chat-input textarea{min-height:48px;max-height:110px}
+    .report-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .report-box{padding:16px;border-radius:15px;background:var(--panel2);border:1px solid var(--line)}
+    .report-box strong{font-size:22px;display:block;margin-top:5px}.report-box small{color:var(--muted)}
+    .donut{
+      --p:72;width:150px;height:150px;border-radius:50%;display:grid;place-items:center;margin:auto;
+      background:conic-gradient(var(--primary) calc(var(--p)*1%),var(--line) 0)
+    }
+    .donut:before{content:"";width:112px;height:112px;border-radius:50%;background:var(--panel);position:absolute}
+    .donut span{position:relative;font-size:24px;font-weight:800}
+    .modal{
+      position:fixed;inset:0;background:rgba(8,12,20,.55);display:none;align-items:center;justify-content:center;
+      padding:18px;z-index:100
+    }
+    .modal.show{display:flex}.modal-card{width:min(720px,100%);max-height:90vh;overflow:auto;background:var(--panel);border-radius:20px;padding:22px;box-shadow:0 24px 70px rgba(0,0,0,.28)}
+    .toast{position:fixed;right:20px;bottom:20px;z-index:120;background:var(--text);color:var(--panel);padding:12px 16px;border-radius:12px;opacity:0;transform:translateY(12px);pointer-events:none;transition:.25s}
+    .toast.show{opacity:1;transform:none}
+    .notice{padding:12px 14px;border-radius:12px;background:rgba(245,158,11,.12);color:var(--text);border:1px solid rgba(245,158,11,.3);font-size:13px;line-height:1.7}
+
+    .word-unit{border:1px solid var(--line);border-radius:16px;padding:15px;background:var(--panel2)}
+    .word-unit h4{margin:0 0 12px;font-size:15px;line-height:1.5}
+    .word-chips{display:flex;flex-wrap:wrap;gap:8px}
+    .word-btn{border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:11px;padding:9px 10px;text-align:left}
+    .word-btn:hover{border-color:var(--primary);background:rgba(40,120,232,.08)}
+    .word-btn b{display:block;font-size:15px}.word-btn small{color:var(--muted)}
+    .sentence-box{margin-top:12px;padding:11px;border-radius:11px;background:rgba(40,120,232,.09);line-height:1.6}
+    .listen-options{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}
+
+    .hide{display:none!important}
+    @media (max-width:980px){
+      .app{grid-template-columns:1fr}.sidebar{position:fixed;left:-260px;transition:.25s;width:240px;box-shadow:var(--shadow)}
+      .sidebar.open{left:0}.mobile-menu{display:grid;place-items:center}
+      .metrics{grid-template-columns:repeat(2,1fr)}.two-col,.three-col{grid-template-columns:1fr}.quick-grid{grid-template-columns:repeat(2,1fr)}
+      .topbar{padding:0 16px}.content{padding:18px}
+    }
+    @media (max-width:620px){
+      .listen-options{grid-template-columns:1fr 1fr}
+      .metrics{grid-template-columns:1fr}.form-grid,.report-summary{grid-template-columns:1fr}.hero-row{align-items:flex-start;flex-direction:column}
+      .quick-grid{grid-template-columns:1fr 1fr}.bar-row{grid-template-columns:90px 1fr 42px}.top-actions .ghost-btn span{display:none}
+      .top-title p{display:none}.content{padding:14px}.question-card{padding:18px}
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="brand-mark">✦</div>
+      <div><h1>江城智学伴</h1><p>武汉小学三年级 · 数学英语</p></div>
+    </div>
+    <div class="role-switch">
+      <button data-role="student" class="active">学生</button>
+      <button data-role="parent">家长</button>
+      <button data-role="admin">管理</button>
+    </div>
+    <nav class="nav" id="nav"></nav>
+    <div class="side-footer">
+      <b>武汉三年级专版</b><br>
+      数学参照人教版三年级知识结构，英语按武汉常用 Join In 主题设计。
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div style="display:flex;align-items:center;gap:12px">
+        <button class="mobile-menu" id="mobileMenu">☰</button>
+        <div class="top-title">
+          <h2 id="pageTitle">学习首页</h2>
+          <p id="pageSubtitle">根据学情安排今天的学习任务</p>
+        </div>
+      </div>
+      <div class="top-actions">
+        <select id="termSwitch" class="ghost-btn" aria-label="选择学期" style="width:auto"><option value="上册">三年级上册</option><option value="下册">三年级下册</option></select>
+        <button class="ghost-btn" id="themeBtn">◐ <span>切换主题</span></button>
+        <button class="ghost-btn" id="profileBtn">👤 <span id="topName">小明</span></button>
+      </div>
+    </header>
+
+    <div class="content">
+      <!-- 学生：首页 -->
+      <section class="page active" id="student-home">
+        <div class="hero">
+          <div class="hero-row">
+            <div>
+              <h3 id="helloText">你好，小江同学！</h3>
+              <p>今天从数学思维和英语听说各完成一个小任务。题目融入东湖、黄鹤楼、武汉地铁等生活情境。</p>
+            </div>
+            <div class="hero-actions">
+              <button class="ghost-btn" data-go="student-diagnosis">开始诊断</button>
+              <button class="ghost-btn" data-go="student-practice">立即练习</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid metrics">
+          <div class="metric"><div class="metric-icon">⏱</div><div><small>累计学习</small><strong id="metricMinutes">0 分钟</strong></div></div>
+          <div class="metric"><div class="metric-icon">✓</div><div><small>今日任务</small><strong id="metricTasks">0/4</strong></div></div>
+          <div class="metric"><div class="metric-icon">◎</div><div><small>平均正确率</small><strong id="metricAccuracy">0%</strong></div></div>
+          <div class="metric"><div class="metric-icon">↺</div><div><small>待复习错题</small><strong id="metricWrong">0 道</strong></div></div>
+        </div>
+
+        <div class="grid two-col">
+          <div class="card">
+            <div class="section-head">
+              <div><h3>智能推荐</h3><p>根据你的答题记录自动排序</p></div>
+              <span class="chip">学情驱动</span>
+            </div>
+            <div class="course-list" id="recommendList"></div>
+          </div>
+          <div class="card">
+            <div class="section-head"><div><h3>今日学习计划</h3><p>完成后自动更新进度</p></div><button class="ghost-btn" data-go="student-plan">管理</button></div>
+            <div class="task-list" id="homeTaskList"></div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:18px">
+          <div class="section-head"><div><h3>快捷入口</h3><p>常用学习功能</p></div></div>
+          <div class="quick-grid">
+            <button class="quick" data-go="student-english"><span>🔊</span><b>英语点读</b><small>单词句型发音</small></button>
+            <button class="quick" data-go="student-wrong"><span>📝</span><b>错题本</b><small>按错因复习</small></button>
+            <button class="quick" data-go="student-tutor"><span>💬</span><b>学习助手</b><small>数学英语答疑</small></button>
+            <button class="quick" data-go="student-practice"><span>🎯</span><b>智能练习</b><small>分层推题</small></button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 学生：诊断 -->
+      <section class="page" id="student-diagnosis">
+        <div class="quiz-wrap">
+          <div class="card" id="diagnosisIntro">
+            <div class="section-head"><div><h3>入学诊断测试</h3><p>按当前学期组卷，覆盖数学和 Join In 英语核心内容</p></div><span class="chip">约8分钟</span></div>
+            <div class="notice">诊断结果会用于生成推荐内容。测试过程中请独立完成，不必追求速度。</div>
+            <div class="form-grid" style="margin-top:18px">
+              <div class="form-item"><label>选择学科</label><select id="diagSubject"><option value="all">数学 + 英语</option><option value="数学">数学</option><option value="英语">英语</option></select></div>
+              <div class="form-item"><label>题目数量</label><select id="diagCount"><option value="8">8题</option><option value="10">10题</option><option value="12">12题</option></select></div>
+            </div>
+            <button class="primary-btn" id="startDiagnosis" style="margin-top:18px">开始测试</button>
+          </div>
+          <div id="diagnosisArea" class="hide"></div>
+        </div>
+      </section>
+
+      <!-- 学生：练习 -->
+      <section class="page" id="student-practice">
+        <div class="quiz-wrap">
+          <div class="card" id="practiceSetup">
+            <div class="section-head"><div><h3>智能练习</h3><p>可按学科、知识点和难度筛选</p></div><span class="chip">即时反馈</span></div>
+            <div class="form-grid">
+              <div class="form-item"><label>学科</label><select id="practiceSubject"></select></div>
+              <div class="form-item"><label>知识点</label><select id="practiceKnowledge"><option value="all">全部知识点</option></select></div>
+              <div class="form-item"><label>难度</label><select id="practiceDifficulty"><option value="all">全部难度</option><option value="基础">基础</option><option value="进阶">进阶</option><option value="综合">综合</option></select></div>
+              <div class="form-item"><label>题目数量</label><select id="practiceCount"><option value="5">5题</option><option value="10">10题</option><option value="15">15题</option></select></div>
+            </div>
+            <button class="primary-btn" id="startPractice" style="margin-top:18px">生成练习</button>
+          </div>
+          <div id="practiceArea" class="hide"></div>
+        </div>
+      </section>
+
+      <!-- 学生：AI辅导 -->
+      <section class="page" id="student-tutor">
+        <div class="grid two-col">
+          <div>
+            <div class="chat">
+              <div class="messages" id="messages">
+                <div class="msg ai">你好，我是武汉三年级学习助手。你可以问数学计算、应用题或 Join In 英语词句，我会用“提示—步骤—总结”的方式帮助你。\n\n示例：\n1. 125×4怎么计算？\n2. schoolbag是什么意思？\n3. 帮我出一道东湖情境题。</div>
+              </div>
+              <div class="chat-input">
+                <textarea id="chatText" placeholder="输入你的问题，按Ctrl+Enter发送"></textarea>
+                <button class="primary-btn" id="sendChat">发送</button>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="section-head"><div><h3>辅导说明</h3><p>三年级离线规则版</p></div><span class="chip">无需网络</span></div>
+            <div class="notice">本页不会连接外部AI，也不会上传对话。它会优先匹配武汉三年级数学题库和 Join In 英语知识点。</div>
+            <div style="margin-top:16px;line-height:1.8;font-size:14px">
+              <b>适合提问：</b>
+              <ul>
+                <li>题目怎么分步骤解</li>
+                <li>某个知识点是什么意思</li>
+                <li>为什么答案是这个</li>
+                <li>帮我出一道同类题</li>
+              </ul>
+            </div>
+            <button class="ghost-btn" id="clearChat">清空对话</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 学生：错题 -->
+      <section class="page" id="student-wrong">
+        <div class="section-head">
+          <div><h3>智能错题本</h3><p>错题会自动记录，标记掌握后仍保留历史</p></div>
+          <div style="display:flex;gap:8px"><select id="wrongFilter" style="width:auto"><option value="pending">待复习</option><option value="mastered">已掌握</option><option value="all">全部</option></select><button class="primary-btn" id="reviewWrong">错题复习</button></div>
+        </div>
+        <div class="wrong-list" id="wrongList"></div>
+      </section>
+
+      <!-- 学生：计划 -->
+      <section class="page" id="student-plan">
+        <div class="grid two-col">
+          <div class="card">
+            <div class="section-head"><div><h3>今日计划</h3><p>勾选完成，进度自动保存</p></div><button class="primary-btn" id="addTaskBtn">添加任务</button></div>
+            <div class="task-list" id="planTaskList"></div>
+          </div>
+          <div class="card">
+            <div class="section-head"><div><h3>完成情况</h3><p>每天坚持一点点</p></div></div>
+            <div class="donut" id="planDonut"><span id="planPercent">0%</span></div>
+            <div id="planAdvice" style="text-align:center;color:var(--muted);margin-top:16px;line-height:1.7"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 学生：报告 -->
+      <section class="page" id="student-report">
+        <div class="report-summary" id="studentReportSummary"></div>
+        <div class="grid two-col" style="margin-top:18px">
+          <div class="card"><div class="section-head"><div><h3>知识点掌握度</h3><p>基于答题正确率和练习次数</p></div></div><div class="bar-list" id="masteryBars"></div></div>
+          <div class="card"><div class="section-head"><div><h3>学习建议</h3><p>根据当前数据生成</p></div></div><div id="studyAdvice" style="line-height:1.9"></div></div>
+        </div>
+        <div class="card" style="margin-top:18px"><div class="section-head"><div><h3>最近答题记录</h3><p>最多显示20条</p></div></div><div class="table-wrap"><table><thead><tr><th>时间</th><th>学科</th><th>知识点</th><th>结果</th><th>用时</th></tr></thead><tbody id="historyTable"></tbody></table></div></div>
+      </section>
+
+
+      <!-- 学生：英语点读 -->
+      <section class="page" id="student-english">
+        <div class="hero">
+          <div class="hero-row">
+            <div>
+              <h3>Join In 英语点读乐园</h3>
+              <p>点击单词或句型即可朗读。建议采用“听一遍—跟读两遍—遮住中文说一遍”的练习方法。</p>
+            </div>
+            <span class="chip" id="englishTermBadge">三年级上册</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="section-head">
+            <div><h3>同步主题词汇</h3><p>浏览器语音离线可用性取决于电脑是否安装英文语音包</p></div>
+            <button class="ghost-btn" id="speakAllSentence">朗读今日句型</button>
+          </div>
+          <div class="grid three-col" id="englishUnitGrid"></div>
+        </div>
+        <div class="card" style="margin-top:18px">
+          <div class="section-head"><div><h3>听音小挑战</h3><p>点击“播放”，再选出听到的单词</p></div><span class="chip">听说训练</span></div>
+          <div id="listenChallenge"></div>
+        </div>
+      </section>
+
+      <!-- 家长 -->
+      <section class="page" id="parent-overview">
+        <div class="hero">
+          <div class="hero-row"><div><h3 id="parentHero">孩子本周学习概览</h3><p>重点关注学习习惯、知识薄弱点和持续进步，不只看一次分数。</p></div><button class="ghost-btn" id="printReport">打印报告</button></div>
+        </div>
+        <div class="report-summary" id="parentSummary"></div>
+        <div class="grid two-col" style="margin-top:18px">
+          <div class="card"><div class="section-head"><div><h3>薄弱知识点</h3><p>建议家长陪伴但不代替作答</p></div></div><div class="bar-list" id="weakBars"></div></div>
+          <div class="card"><div class="section-head"><div><h3>家长建议</h3><p>基于当前学习数据</p></div></div><div id="parentAdvice" style="line-height:1.9"></div></div>
+        </div>
+      </section>
+
+      <section class="page" id="parent-controls">
+        <div class="grid two-col">
+          <div class="card">
+            <div class="section-head"><div><h3>学习时段设置</h3><p>设置为家庭约定，不强制锁机</p></div></div>
+            <div class="form-grid">
+              <div class="form-item"><label>每日开始时间</label><input type="text" id="controlStart" placeholder="例如 18:30"></div>
+              <div class="form-item"><label>每日结束时间</label><input type="text" id="controlEnd" placeholder="例如 20:30"></div>
+              <div class="form-item"><label>单次学习时长（分钟）</label><input type="number" id="sessionLimit" min="10" max="180"></div>
+              <div class="form-item"><label>休息提醒（分钟）</label><input type="number" id="breakEvery" min="10" max="90"></div>
+            </div>
+            <button class="primary-btn" id="saveControls" style="margin-top:16px">保存设置</button>
+          </div>
+          <div class="card">
+            <div class="section-head"><div><h3>使用原则</h3><p>避免把学习系统变成监控工具</p></div></div>
+            <ul style="line-height:1.9">
+              <li>优先关注完成情况和知识薄弱点。</li>
+              <li>不建议用学习时长作为唯一评价。</li>
+              <li>出现连续错误时先休息，再回到基础概念。</li>
+              <li>尊重孩子的解释和反馈。</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 管理 -->
+      <section class="page" id="admin-dashboard">
+        <div class="grid metrics">
+          <div class="metric"><div class="metric-icon">📚</div><div><small>题库总量</small><strong id="adminQuestionCount">0</strong></div></div>
+          <div class="metric"><div class="metric-icon">🧠</div><div><small>知识点数</small><strong id="adminKnowledgeCount">0</strong></div></div>
+          <div class="metric"><div class="metric-icon">🧾</div><div><small>答题记录</small><strong id="adminHistoryCount">0</strong></div></div>
+          <div class="metric"><div class="metric-icon">⚠</div><div><small>待复习错题</small><strong id="adminWrongCount">0</strong></div></div>
+        </div>
+        <div class="card">
+          <div class="section-head"><div><h3>数据状态</h3><p>当前为单机本地数据库</p></div><span class="chip">LocalStorage</span></div>
+          <div class="notice">适合武汉小学三年级学生家庭使用、课堂练习和小规模试点。多人同步、账号登录、云端题库与真实大模型仍需增加服务端。</div>
+        </div>
+      </section>
+
+      <section class="page" id="admin-questions">
+        <div class="section-head">
+          <div><h3>题库管理</h3><p>支持新增、删除、导入和导出</p></div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="ghost-btn" id="exportQuestions">导出题库</button>
+            <button class="ghost-btn" id="importQuestionsBtn">导入题库</button>
+            <input type="file" id="importQuestionsFile" accept=".json" class="hide">
+            <button class="primary-btn" id="addQuestionBtn">新增题目</button>
+          </div>
+        </div>
+        <div class="card" style="padding:0">
+          <div class="table-wrap" style="border:0"><table><thead><tr><th>ID</th><th>学期</th><th>学科</th><th>知识点</th><th>难度</th><th>题干</th><th>操作</th></tr></thead><tbody id="questionTable"></tbody></table></div>
+        </div>
+      </section>
+
+      <section class="page" id="admin-settings">
+        <div class="grid two-col">
+          <div class="card">
+            <div class="section-head"><div><h3>学生资料</h3><p>用于本地显示和报告</p></div></div>
+            <div class="form-grid">
+              <div class="form-item"><label>学生姓名</label><input type="text" id="profileName"></div>
+              <div class="form-item"><label>年级</label><select id="profileGrade"><option selected>三年级</option></select></div>
+              <div class="form-item"><label>当前学期</label><select id="profileTerm"><option>上册</option><option>下册</option></select></div>
+              <div class="form-item full"><label>学校/班级（可选）</label><input type="text" id="profileClass" placeholder="例如：八年级3班"></div>
+            </div>
+            <button class="primary-btn" id="saveProfile" style="margin-top:16px">保存资料</button>
+          </div>
+          <div class="card">
+            <div class="section-head"><div><h3>数据备份</h3><p>迁移浏览器或电脑前请导出</p></div></div>
+            <div style="display:grid;gap:10px">
+              <button class="ghost-btn" id="exportAll">导出全部数据</button>
+              <button class="ghost-btn" id="importAllBtn">导入全部数据</button>
+              <input type="file" id="importAllFile" accept=".json" class="hide">
+              <button class="danger-btn" id="resetAll">恢复初始数据</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<!-- 通用弹窗 -->
+<div class="modal" id="taskModal">
+  <div class="modal-card">
+    <div class="section-head"><div><h3>添加学习任务</h3><p>任务会保存到当前浏览器</p></div><button class="ghost-btn" data-close="taskModal">关闭</button></div>
+    <div class="form-grid">
+      <div class="form-item full"><label>任务名称</label><input type="text" id="newTaskName" placeholder="例如：复习一次函数错题"></div>
+      <div class="form-item"><label>学科</label><select id="newTaskSubject"><option>数学</option><option>英语</option><option>语文</option><option>物理</option><option>其他</option></select></div>
+      <div class="form-item"><label>预计时长（分钟）</label><input type="number" id="newTaskMinutes" value="15" min="5" max="180"></div>
+    </div>
+    <button class="primary-btn" id="saveNewTask" style="margin-top:16px">添加任务</button>
+  </div>
+</div>
+
+<div class="modal" id="questionModal">
+  <div class="modal-card">
+    <div class="section-head"><div><h3>新增题目</h3><p>当前支持单选题</p></div><button class="ghost-btn" data-close="questionModal">关闭</button></div>
+    <div class="form-grid">
+      <div class="form-item"><label>学期</label><select id="qSemester"><option>上册</option><option>下册</option></select></div>
+      <div class="form-item"><label>学科</label><input type="text" id="qSubject" placeholder="数学"></div>
+      <div class="form-item"><label>知识点</label><input type="text" id="qKnowledge" placeholder="一次函数"></div>
+      <div class="form-item"><label>难度</label><select id="qDifficulty"><option>基础</option><option>进阶</option><option>综合</option></select></div>
+      <div class="form-item"><label>正确选项</label><select id="qAnswer"><option value="0">A</option><option value="1">B</option><option value="2">C</option><option value="3">D</option></select></div>
+      <div class="form-item full"><label>题干</label><textarea id="qStem"></textarea></div>
+      <div class="form-item"><label>选项A</label><input type="text" id="qA"></div>
+      <div class="form-item"><label>选项B</label><input type="text" id="qB"></div>
+      <div class="form-item"><label>选项C</label><input type="text" id="qC"></div>
+      <div class="form-item"><label>选项D</label><input type="text" id="qD"></div>
+      <div class="form-item full"><label>解析</label><textarea id="qExplanation"></textarea></div>
+    </div>
+    <button class="primary-btn" id="saveQuestion" style="margin-top:16px">保存题目</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  "use strict";
+
+  const STORE_KEY = "jiangcheng_grade3_math_english_v1";
+  const defaultQuestions = [{"id":1,"semester":"上册","subject":"数学","knowledge":"时、分、秒","difficulty":"基础","stem":"一节数学课从上午9:00开始，9:40结束，一共上了多长时间？","options":["30分钟","40分钟","50分钟","1小时"],"answer":1,"explanation":"从9:00到9:40经过40分钟。"},{"id":2,"semester":"上册","subject":"数学","knowledge":"时、分、秒","difficulty":"进阶","stem":"小华用2分钟做完一道题，2分钟等于多少秒？","options":["20秒","60秒","120秒","200秒"],"answer":2,"explanation":"1分钟=60秒，2分钟=2×60=120秒。"},{"id":3,"semester":"上册","subject":"数学","knowledge":"万以内的加减法（一）","difficulty":"基础","stem":"东湖绿道上午有320名游客，下午又来了180名，一共有多少名游客？","options":["400名","500名","510名","600名"],"answer":1,"explanation":"320+180=500。"},{"id":4,"semester":"上册","subject":"数学","knowledge":"万以内的加减法（一）","difficulty":"进阶","stem":"武汉地铁站准备了650张宣传卡，发出280张，还剩多少张？","options":["370张","380张","430张","930张"],"answer":0,"explanation":"650-280=370。"},{"id":5,"semester":"上册","subject":"数学","knowledge":"测量","difficulty":"基础","stem":"一支铅笔长约18（ ）。","options":["毫米","厘米","分米","米"],"answer":1,"explanation":"铅笔的长度通常用厘米作单位。"},{"id":6,"semester":"上册","subject":"数学","knowledge":"测量","difficulty":"进阶","stem":"1千米等于多少米？","options":["10米","100米","1000米","10000米"],"answer":2,"explanation":"1千米=1000米。"},{"id":7,"semester":"上册","subject":"数学","knowledge":"万以内的加减法（二）","difficulty":"进阶","stem":"黄鹤楼文创店上午卖出468张明信片，下午卖出327张，全天卖出多少张？","options":["685张","695张","795张","895张"],"answer":2,"explanation":"468+327=795。个位8+7=15，向十位进1。"},{"id":8,"semester":"上册","subject":"数学","knowledge":"倍的认识","difficulty":"基础","stem":"小明有4本故事书，小芳的故事书是小明的3倍。小芳有多少本？","options":["7本","8本","12本","16本"],"answer":2,"explanation":"求4的3倍，用4×3=12。"},{"id":9,"semester":"上册","subject":"数学","knowledge":"多位数乘一位数","difficulty":"基础","stem":"武汉轮渡每排坐8人，6排一共可以坐多少人？","options":["14人","36人","48人","56人"],"answer":2,"explanation":"8×6=48。"},{"id":10,"semester":"上册","subject":"数学","knowledge":"多位数乘一位数","difficulty":"进阶","stem":"学校准备了125盒彩笔，每盒有4支，一共有多少支彩笔？","options":["129支","400支","500支","520支"],"answer":2,"explanation":"125×4=500。"},{"id":11,"semester":"上册","subject":"数学","knowledge":"长方形和正方形","difficulty":"基础","stem":"一个长方形长6厘米、宽4厘米，它的周长是多少厘米？","options":["10厘米","20厘米","24厘米","28厘米"],"answer":1,"explanation":"长方形周长=(长+宽)×2=(6+4)×2=20厘米。"},{"id":12,"semester":"上册","subject":"数学","knowledge":"分数的初步认识","difficulty":"基础","stem":"把一个蛋糕平均分成4份，吃了其中1份，吃了这个蛋糕的几分之几？","options":["二分之一","三分之一","四分之一","四分之三"],"answer":2,"explanation":"平均分成4份，取1份，表示四分之一。"},{"id":13,"semester":"上册","subject":"数学","knowledge":"集合","difficulty":"综合","stem":"三（1）班有8人喜欢足球，6人喜欢篮球，其中3人两种都喜欢。至少喜欢一种运动的有多少人？","options":["11人","14人","17人","3人"],"answer":0,"explanation":"8+6-3=11。两种都喜欢的3人被重复计算了一次，要减去。"},{"id":14,"semester":"上册","subject":"数学","knowledge":"综合应用","difficulty":"综合","stem":"学校组织参观湖北省博物馆，3辆车每辆坐42人，一共可以坐多少人？","options":["84人","116人","126人","132人"],"answer":2,"explanation":"42×3=126。"},{"id":15,"semester":"下册","subject":"数学","knowledge":"位置与方向","difficulty":"基础","stem":"早晨太阳从东方升起。面向东方时，左边是什么方向？","options":["东","西","南","北"],"answer":3,"explanation":"面向东时，左边是北，右边是南。"},{"id":16,"semester":"下册","subject":"数学","knowledge":"除数是一位数的除法","difficulty":"基础","stem":"96本图书平均放在3个书架上，每个书架放多少本？","options":["23本","32本","36本","93本"],"answer":1,"explanation":"96÷3=32。"},{"id":17,"semester":"下册","subject":"数学","knowledge":"除数是一位数的除法","difficulty":"进阶","stem":"东湖游船码头有248名游客，每8人一组，可以分成多少组？","options":["21组","30组","31组","32组"],"answer":2,"explanation":"248÷8=31。"},{"id":18,"semester":"下册","subject":"数学","knowledge":"复式统计表","difficulty":"基础","stem":"统计表显示：三（1）班喜欢足球12人，喜欢篮球8人。喜欢足球的比喜欢篮球的多多少人？","options":["4人","8人","12人","20人"],"answer":0,"explanation":"12-8=4。"},{"id":19,"semester":"下册","subject":"数学","knowledge":"两位数乘两位数","difficulty":"基础","stem":"一盒彩笔12元，买14盒一共需要多少元？","options":["26元","148元","168元","182元"],"answer":2,"explanation":"12×14=12×(10+4)=120+48=168。"},{"id":20,"semester":"下册","subject":"数学","knowledge":"两位数乘两位数","difficulty":"进阶","stem":"江汉路一场公益活动摆了23排座椅，每排18把，一共多少把？","options":["314把","404把","414把","424把"],"answer":2,"explanation":"23×18=23×(20-2)=460-46=414。"},{"id":21,"semester":"下册","subject":"数学","knowledge":"面积","difficulty":"基础","stem":"一个长方形长5厘米、宽3厘米，面积是多少平方厘米？","options":["8平方厘米","15平方厘米","16平方厘米","30平方厘米"],"answer":1,"explanation":"长方形面积=长×宽=5×3=15平方厘米。"},{"id":22,"semester":"下册","subject":"数学","knowledge":"面积","difficulty":"进阶","stem":"一块正方形手工纸边长为6厘米，面积是多少平方厘米？","options":["12","24","30","36"],"answer":3,"explanation":"正方形面积=边长×边长=6×6=36平方厘米。"},{"id":23,"semester":"下册","subject":"数学","knowledge":"年、月、日","difficulty":"基础","stem":"一年中有多少个月？","options":["10个月","11个月","12个月","13个月"],"answer":2,"explanation":"一年有12个月。"},{"id":24,"semester":"下册","subject":"数学","knowledge":"年、月、日","difficulty":"进阶","stem":"平年2月有多少天？","options":["28天","29天","30天","31天"],"answer":0,"explanation":"平年2月有28天，闰年2月有29天。"},{"id":25,"semester":"下册","subject":"数学","knowledge":"小数的初步认识","difficulty":"基础","stem":"武汉热干面一碗6.5元，6.5元读作什么？","options":["六点五元","六十五元","六元五分","六百五十元"],"answer":0,"explanation":"小数点读作“点”，6.5读作六点五。"},{"id":26,"semester":"下册","subject":"数学","knowledge":"小数的初步认识","difficulty":"进阶","stem":"下面哪个数最大？","options":["3.2","2.9","3.8","3.5"],"answer":2,"explanation":"整数部分都是3时比较十分位，8最大，所以3.8最大。"},{"id":27,"semester":"下册","subject":"数学","knowledge":"搭配","difficulty":"综合","stem":"有2件上衣和3条裤子，每件上衣都可以搭配每条裤子，一共有多少种搭配？","options":["5种","6种","8种","9种"],"answer":1,"explanation":"2×3=6种。"},{"id":28,"semester":"下册","subject":"数学","knowledge":"综合应用","difficulty":"综合","stem":"学校买了15箱矿泉水，每箱24瓶，活动用掉了180瓶，还剩多少瓶？","options":["160瓶","170瓶","180瓶","360瓶"],"answer":2,"explanation":"总数15×24=360瓶，剩下360-180=180瓶。"},{"id":29,"semester":"上册","subject":"英语","knowledge":"Unit 1 Hello, hello!","difficulty":"基础","stem":"早上见到老师，你应该说：","options":["Good morning!","Good night!","Goodbye!","Thank you!"],"answer":0,"explanation":"早上问候用 Good morning!"},{"id":30,"semester":"上册","subject":"英语","knowledge":"Unit 1 Hello, hello!","difficulty":"基础","stem":"—What's your name? —___","options":["I'm fine.","My name is Amy.","I'm nine.","Goodbye."],"answer":1,"explanation":"询问姓名时可回答 My name is..."},{"id":31,"semester":"上册","subject":"英语","knowledge":"Unit 2 Colourful world","difficulty":"基础","stem":"“红色”用英语怎么说？","options":["red","blue","green","yellow"],"answer":0,"explanation":"red意为红色。"},{"id":32,"semester":"上册","subject":"英语","knowledge":"Unit 2 Colourful world","difficulty":"进阶","stem":"The grass is usually ___.","options":["blue","green","black","pink"],"answer":1,"explanation":"grass（草）通常是green（绿色的）。"},{"id":33,"semester":"上册","subject":"英语","knowledge":"Unit 3 Numbers are fun!","difficulty":"基础","stem":"数字“8”用英语怎么说？","options":["six","seven","eight","nine"],"answer":2,"explanation":"8的英文是eight。"},{"id":34,"semester":"上册","subject":"英语","knowledge":"Unit 3 Numbers are fun!","difficulty":"进阶","stem":"How many pencils? 图片中有5支铅笔，应回答：","options":["Three pencils.","Four pencils.","Five pencils.","Ten pencils."],"answer":2,"explanation":"5支铅笔应说 Five pencils."},{"id":35,"semester":"上册","subject":"英语","knowledge":"Unit 4 My school things","difficulty":"基础","stem":"“书包”用英语怎么说？","options":["book","schoolbag","ruler","pencil"],"answer":1,"explanation":"schoolbag意为书包。"},{"id":36,"semester":"上册","subject":"英语","knowledge":"Unit 4 My school things","difficulty":"进阶","stem":"I write with a ___.","options":["pencil","desk","door","chair"],"answer":0,"explanation":"我们用pencil（铅笔）书写。"},{"id":37,"semester":"上册","subject":"英语","knowledge":"Unit 5 In my classroom","difficulty":"基础","stem":"“请打开门。”正确表达是：","options":["Open the door, please.","Close the book, please.","Sit down, please.","Stand up, please."],"answer":0,"explanation":"Open the door, please. 意为“请打开门”。"},{"id":38,"semester":"上册","subject":"英语","knowledge":"Unit 5 In my classroom","difficulty":"进阶","stem":"We sit on a ___.","options":["window","chair","board","door"],"answer":1,"explanation":"我们坐在chair（椅子）上。"},{"id":39,"semester":"上册","subject":"英语","knowledge":"Unit 6 Meet my family","difficulty":"基础","stem":"“妈妈”用英语怎么说？","options":["mother","father","brother","sister"],"answer":0,"explanation":"mother意为妈妈。"},{"id":40,"semester":"上册","subject":"英语","knowledge":"Unit 6 Meet my family","difficulty":"进阶","stem":"This is my father's son. He is my ___.","options":["mother","sister","brother","grandma"],"answer":2,"explanation":"爸爸的儿子是“我”的兄弟，brother。"},{"id":41,"semester":"上册","subject":"英语","knowledge":"综合口语","difficulty":"综合","stem":"在东湖遇到外国小朋友，你想介绍自己，应该说：","options":["Hello! My name is Li Ming.","Open the window.","It's a ruler.","I like red."],"answer":0,"explanation":"介绍自己可以说 Hello! My name is..."},{"id":42,"semester":"上册","subject":"英语","knowledge":"综合词汇","difficulty":"综合","stem":"Which one is a school thing?","options":["pencil","mother","green","eight"],"answer":0,"explanation":"pencil是学习用品。"},{"id":43,"semester":"下册","subject":"英语","knowledge":"Unit 1 Pets","difficulty":"基础","stem":"“猫”用英语怎么说？","options":["dog","cat","bird","fish"],"answer":1,"explanation":"cat意为猫。"},{"id":44,"semester":"下册","subject":"英语","knowledge":"Unit 1 Pets","difficulty":"进阶","stem":"I have a pet. It can swim. It may be a ___.","options":["fish","rabbit","cat","dog"],"answer":0,"explanation":"fish（鱼）会游泳。"},{"id":45,"semester":"下册","subject":"英语","knowledge":"Unit 2 The days of the week","difficulty":"基础","stem":"Monday后面是哪一天？","options":["Sunday","Tuesday","Friday","Saturday"],"answer":1,"explanation":"Monday后面是Tuesday。"},{"id":46,"semester":"下册","subject":"英语","knowledge":"Unit 2 The days of the week","difficulty":"进阶","stem":"We don't go to school on Sunday. Sunday is a ___.","options":["colour","school thing","day of the week","body part"],"answer":2,"explanation":"Sunday是一周中的一天。"},{"id":47,"semester":"下册","subject":"英语","knowledge":"Unit 3 Clothes","difficulty":"基础","stem":"“T恤衫”用英语怎么说？","options":["T-shirt","shoe","cap","skirt"],"answer":0,"explanation":"T-shirt意为T恤衫。"},{"id":48,"semester":"下册","subject":"英语","knowledge":"Unit 3 Clothes","difficulty":"进阶","stem":"I wear these on my feet.","options":["shoes","shirts","caps","skirts"],"answer":0,"explanation":"穿在脚上的是shoes（鞋）。"},{"id":49,"semester":"下册","subject":"英语","knowledge":"Unit 4 Feelings","difficulty":"基础","stem":"看到生日礼物时很高兴，可以说：I'm ___.","options":["happy","sad","angry","tired"],"answer":0,"explanation":"happy意为高兴的。"},{"id":50,"semester":"下册","subject":"英语","knowledge":"Unit 4 Feelings","difficulty":"进阶","stem":"After running for a long time, I am ___.","options":["tired","yellow","small","Monday"],"answer":0,"explanation":"跑很久后会感到tired（累的）。"},{"id":51,"semester":"下册","subject":"英语","knowledge":"Unit 5 Food","difficulty":"基础","stem":"“苹果”用英语怎么说？","options":["apple","milk","bread","rice"],"answer":0,"explanation":"apple意为苹果。"},{"id":52,"semester":"下册","subject":"英语","knowledge":"Unit 5 Food","difficulty":"进阶","stem":"—Do you like bananas? —Yes, ___.","options":["I do","I am","I can","I have"],"answer":0,"explanation":"Do you...? 的肯定回答是 Yes, I do."},{"id":53,"semester":"下册","subject":"英语","knowledge":"Unit 6 Body","difficulty":"基础","stem":"“眼睛”用英语怎么说？","options":["ear","eye","nose","mouth"],"answer":1,"explanation":"eye意为眼睛。"},{"id":54,"semester":"下册","subject":"英语","knowledge":"Unit 6 Body","difficulty":"进阶","stem":"We hear with our ___.","options":["eyes","ears","hands","feet"],"answer":1,"explanation":"我们用ears（耳朵）听声音。"},{"id":55,"semester":"下册","subject":"英语","knowledge":"综合口语","difficulty":"综合","stem":"你想问同学是否喜欢热干面，可以说：","options":["Do you like hot dry noodles?","What colour is it?","How old are you?","Open your book."],"answer":0,"explanation":"询问是否喜欢某种食物，用 Do you like...?"},{"id":56,"semester":"下册","subject":"英语","knowledge":"综合词汇","difficulty":"综合","stem":"Which word is a feeling?","options":["happy","Monday","T-shirt","apple"],"answer":0,"explanation":"happy表示一种感受。"}];
+
+  const englishUnits = {"上册":[{"unit":"Unit 1 Hello, hello!","words":[["hello","你好"],["good morning","早上好"],["name","名字"],["goodbye","再见"]],"sentence":"Hello! My name is Amy."},{"unit":"Unit 2 Colourful world","words":[["red","红色"],["yellow","黄色"],["blue","蓝色"],["green","绿色"],["purple","紫色"]],"sentence":"My schoolbag is blue."},{"unit":"Unit 3 Numbers are fun!","words":[["one","一"],["three","三"],["five","五"],["eight","八"],["ten","十"]],"sentence":"I have five pencils."},{"unit":"Unit 4 My school things","words":[["book","书"],["pencil","铅笔"],["ruler","尺子"],["schoolbag","书包"],["eraser","橡皮"]],"sentence":"This is my schoolbag."},{"unit":"Unit 5 In my classroom","words":[["desk","书桌"],["chair","椅子"],["door","门"],["window","窗户"],["board","黑板"]],"sentence":"Open the door, please."},{"unit":"Unit 6 Meet my family","words":[["mother","妈妈"],["father","爸爸"],["sister","姐姐/妹妹"],["brother","哥哥/弟弟"],["family","家庭"]],"sentence":"This is my family."}],"下册":[{"unit":"Unit 1 Pets","words":[["cat","猫"],["dog","狗"],["fish","鱼"],["bird","鸟"],["rabbit","兔子"]],"sentence":"I have a pet cat."},{"unit":"Unit 2 The days of the week","words":[["Monday","星期一"],["Tuesday","星期二"],["Friday","星期五"],["Saturday","星期六"],["Sunday","星期日"]],"sentence":"Today is Monday."},{"unit":"Unit 3 Clothes","words":[["T-shirt","T恤衫"],["shirt","衬衫"],["skirt","短裙"],["shoes","鞋"],["cap","帽子"]],"sentence":"I like my red T-shirt."},{"unit":"Unit 4 Feelings","words":[["happy","高兴的"],["sad","难过的"],["angry","生气的"],["tired","疲倦的"],["fine","好的"]],"sentence":"I am happy today."},{"unit":"Unit 5 Food","words":[["apple","苹果"],["banana","香蕉"],["bread","面包"],["milk","牛奶"],["rice","米饭"]],"sentence":"Do you like apples?"},{"unit":"Unit 6 Body","words":[["eye","眼睛"],["ear","耳朵"],["nose","鼻子"],["mouth","嘴"],["hand","手"]],"sentence":"Touch your nose."}]};
+
+  function freshData(){
+    return {
+      version:1,
+      profile:{name:"小江",grade:"三年级",className:"武汉市小学三年级",term:"上册"},
+      questions:JSON.parse(JSON.stringify(defaultQuestions)),
+      history:[],
+      wrong:{},
+      tasks:[
+        {id:1,name:"Join In 单词跟读",subject:"英语",minutes:10,done:true},
+        {id:2,name:"数学口算与应用题",subject:"数学",minutes:15,done:false},
+        {id:3,name:"数学英语错题复习",subject:"综合",minutes:10,done:false},
+        {id:4,name:"英语句型朗读",subject:"英语",minutes:10,done:false}
+      ],
+      controls:{start:"18:30",end:"20:30",sessionLimit:45,breakEvery:30},
+      theme:"light"
+    };
+  }
+
+  let data = loadData();
+  let role = "student";
+  let currentPage = "student-home";
+  let activeSession = null;
+
+  const navConfig = {
+    student:[
+      ["student-home","⌂","学习首页","根据学情安排今天的学习任务"],
+      ["student-diagnosis","◈","诊断测试","快速定位知识薄弱点"],
+      ["student-practice","🎯","智能练习","按知识点和难度进行练习"],
+      ["student-english","🔊","英语点读","Join In 单词与句型发音"],
+      ["student-tutor","💬","学习助手","数学英语本地答疑"],
+      ["student-wrong","📝","错题本","针对性复习错误题目"],
+      ["student-plan","✓","学习计划","管理每日学习任务"],
+      ["student-report","▥","学情报告","查看掌握度与学习记录"]
+    ],
+    parent:[
+      ["parent-overview","▥","孩子学情","查看学习进度和薄弱点"],
+      ["parent-controls","⏱","学习管理","设置学习时段和休息提醒"]
+    ],
+    admin:[
+      ["admin-dashboard","⌂","数据看板","查看本地系统运行数据"],
+      ["admin-questions","📚","题库管理","新增、导入和导出题目"],
+      ["admin-settings","⚙","系统设置","学生资料和数据备份"]
+    ]
+  };
+
+  function loadData(){
+    try{
+      const raw = localStorage.getItem(STORE_KEY);
+      if(!raw) return freshData();
+      const parsed = JSON.parse(raw);
+      return Object.assign(freshData(), parsed);
+    }catch(e){ return freshData(); }
+  }
+
+  function saveData(){
+    localStorage.setItem(STORE_KEY, JSON.stringify(data));
+  }
+
+  function $(id){return document.getElementById(id)}
+  function esc(s){return String(s ?? "").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+  function toast(msg){
+    const t=$("toast");t.textContent=msg;t.classList.add("show");
+    setTimeout(()=>t.classList.remove("show"),2200);
+  }
+  function downloadFile(name, content, type="application/json"){
+    const blob=new Blob([content],{type});
+    const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;a.click();
+    setTimeout(()=>URL.revokeObjectURL(a.href),500);
+  }
+  function nowString(){
+    return new Date().toLocaleString("zh-CN",{hour12:false});
+  }
+  function shuffle(arr){
+    return [...arr].sort(()=>Math.random()-.5);
+  }
+
+  function renderNav(){
+    const nav=$("nav");nav.innerHTML="";
+    navConfig[role].forEach(([id,icon,title])=>{
+      const b=document.createElement("button");
+      b.dataset.page=id;b.className=id===currentPage?"active":"";
+      b.innerHTML=`<span class="icon">${icon}</span><span>${title}</span>`;
+      b.addEventListener("click",()=>showPage(id));
+      nav.appendChild(b);
+    });
+  }
+
+  function showPage(id){
+    currentPage=id;
+    document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id===id));
+    document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===id));
+    const found=Object.values(navConfig).flat().find(x=>x[0]===id);
+    if(found){$("pageTitle").textContent=found[2];$("pageSubtitle").textContent=found[3]}
+    $("sidebar").classList.remove("open");
+    renderAll();
+  }
+
+  function setRole(newRole){
+    role=newRole;
+    document.querySelectorAll(".role-switch button").forEach(b=>b.classList.toggle("active",b.dataset.role===role));
+    currentPage=navConfig[role][0][0];
+    renderNav();showPage(currentPage);
+  }
+
+  function stats(){
+    const h=data.history;
+    const correct=h.filter(x=>x.correct).length;
+    const minutes=Math.round(h.reduce((a,b)=>a+(b.seconds||30),0)/60);
+    const pending=Object.values(data.wrong).filter(w=>!w.mastered).length;
+    const taskDone=data.tasks.filter(t=>t.done).length;
+    return {attempts:h.length,correct,accuracy:h.length?Math.round(correct/h.length*100):0,minutes,pending,taskDone};
+  }
+
+  function masteryMap(){
+    const map={};
+    data.questions.filter(q=>q.semester===data.profile.term).forEach(q=>{if(!map[q.knowledge]) map[q.knowledge]={subject:q.subject,total:0,correct:0}});
+    data.history.forEach(h=>{
+      if(!map[h.knowledge]) map[h.knowledge]={subject:h.subject,total:0,correct:0};
+      map[h.knowledge].total++;
+      if(h.correct) map[h.knowledge].correct++;
+    });
+    Object.values(map).forEach(v=>v.rate=v.total?Math.round(v.correct/v.total*100):60);
+    return map;
+  }
+
+  function renderHome(){
+    const s=stats();
+    $("topName").textContent=data.profile.name;
+    $("helloText").textContent=`你好，${data.profile.name}！`;
+    $("metricMinutes").textContent=`${s.minutes} 分钟`;
+    $("metricTasks").textContent=`${s.taskDone}/${data.tasks.length}`;
+    $("metricAccuracy").textContent=`${s.accuracy}%`;
+    $("metricWrong").textContent=`${s.pending} 道`;
+
+    const mastery=masteryMap();
+    const items=Object.entries(mastery).sort((a,b)=>a[1].rate-b[1].rate).slice(0,4);
+    $("recommendList").innerHTML=items.map(([k,v])=>`
+      <div class="course">
+        <div>
+          <h4>${esc(v.subject)} · ${esc(k)}</h4>
+          <p>当前掌握度 ${v.rate}% · 建议进行一组针对性练习</p>
+          <div class="progress"><span style="width:${v.rate}%"></span></div>
+        </div>
+        <button class="ghost-btn recommend-go" data-subject="${esc(v.subject)}" data-knowledge="${esc(k)}">练习</button>
+      </div>`).join("") || `<div class="empty">完成一次诊断后，系统会生成推荐内容。</div>`;
+    document.querySelectorAll(".recommend-go").forEach(b=>b.addEventListener("click",()=>{
+      showPage("student-practice");
+      $("practiceSubject").value=b.dataset.subject;
+      updateKnowledgeOptions();
+      $("practiceKnowledge").value=b.dataset.knowledge;
+    }));
+
+    renderTaskLists();
+  }
+
+  function renderTaskLists(){
+    const html=data.tasks.map(t=>`
+      <div class="task ${t.done?"done":""}">
+        <div class="task-left">
+          <input type="checkbox" class="task-check" data-id="${t.id}" ${t.done?"checked":""}>
+          <div><div class="task-name">${esc(t.name)}</div><small>${esc(t.subject)} · ${t.minutes}分钟</small></div>
+        </div>
+        <button class="ghost-btn task-delete" data-id="${t.id}">删除</button>
+      </div>`).join("");
+    $("homeTaskList").innerHTML=html;
+    $("planTaskList").innerHTML=html;
+    document.querySelectorAll(".task-check").forEach(c=>c.addEventListener("change",()=>{
+      const t=data.tasks.find(x=>x.id==c.dataset.id);if(t)t.done=c.checked;saveData();renderAll();
+    }));
+    document.querySelectorAll(".task-delete").forEach(b=>b.addEventListener("click",()=>{
+      data.tasks=data.tasks.filter(x=>x.id!=b.dataset.id);saveData();renderAll();
+    }));
+    const done=data.tasks.filter(t=>t.done).length;
+    const percent=data.tasks.length?Math.round(done/data.tasks.length*100):0;
+    $("planPercent").textContent=`${percent}%`;
+    $("planDonut").style.setProperty("--p",percent);
+    $("planAdvice").textContent=percent===100?"今天的计划全部完成。建议结束后休息和回顾，不必继续加量。":`还剩 ${data.tasks.length-done} 项任务。优先完成薄弱知识点，再复习错题。`;
+  }
+
+  function renderQuestionArea(targetId, session, mode){
+    const target=$(targetId);
+    if(!session || session.index>=session.questions.length){
+      const score=session?session.score:0,total=session?session.questions.length:0;
+      target.innerHTML=`<div class="card"><div class="section-head"><div><h3>${mode==="diagnosis"?"诊断完成":"练习完成"}</h3><p>系统已保存本次答题记录</p></div><span class="chip">${score}/${total}</span></div>
+        <div class="report-summary">
+          <div class="report-box"><small>正确题数</small><strong>${score}</strong></div>
+          <div class="report-box"><small>正确率</small><strong>${total?Math.round(score/total*100):0}%</strong></div>
+          <div class="report-box"><small>新增错题</small><strong>${session?session.wrongAdded:0}</strong></div>
+        </div>
+        <div class="quiz-actions"><button class="ghost-btn" data-go="student-report">查看学情报告</button><button class="primary-btn" id="againBtn">再练一次</button></div></div>`;
+      target.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.go)));
+      $("againBtn").addEventListener("click",()=>{
+        if(mode==="diagnosis"){target.classList.add("hide");$("diagnosisIntro").classList.remove("hide");}
+        else{target.classList.add("hide");$("practiceSetup").classList.remove("hide");}
+      });
+      return;
+    }
+    const q=session.questions[session.index];
+    const progress=Math.round((session.index)/session.questions.length*100);
+    target.innerHTML=`
+      <div class="quiz-meta"><span class="chip">${esc(q.subject)} · ${esc(q.knowledge)}</span><span>${session.index+1}/${session.questions.length}</span></div>
+      <div class="progress" style="margin-bottom:14px"><span style="width:${progress}%"></span></div>
+      <div class="question-card">
+        <div style="display:flex;justify-content:space-between;gap:12px"><span class="status ${q.difficulty==="基础"?"ok":q.difficulty==="进阶"?"warn":"bad"}">${esc(q.difficulty)}</span><span style="color:var(--muted);font-size:13px">单选题</span></div>
+        <div class="question-title">${esc(q.stem)}</div>
+        <div class="options">
+          ${q.options.map((o,i)=>`<button class="option" data-index="${i}"><span class="option-letter">${"ABCD"[i]}</span><span>${esc(o)}</span></button>`).join("")}
+        </div>
+        <div id="explainBox"></div>
+        <div class="quiz-actions">
+          <button class="ghost-btn" id="quitQuiz">退出</button>
+          <button class="primary-btn" id="submitAnswer" disabled>提交答案</button>
+        </div>
+      </div>`;
+    let selected=-1,answered=false,start=Date.now();
+    target.querySelectorAll(".option").forEach(b=>b.addEventListener("click",()=>{
+      if(answered)return;selected=Number(b.dataset.index);
+      target.querySelectorAll(".option").forEach(x=>x.classList.remove("selected"));
+      b.classList.add("selected");$("submitAnswer").disabled=false;
+    }));
+    $("submitAnswer").addEventListener("click",()=>{
+      if(selected<0)return;
+      if(answered){session.index++;renderQuestionArea(targetId,session,mode);return}
+      answered=true;
+      const correct=selected===q.answer;
+      if(correct)session.score++; else{
+        session.wrongAdded++;
+        const prev=data.wrong[q.id]||{qid:q.id,attempts:0,mastered:false};
+        prev.attempts++;prev.mastered=false;prev.lastWrong=nowString();data.wrong[q.id]=prev;
+      }
+      data.history.unshift({qid:q.id,subject:q.subject,knowledge:q.knowledge,correct,seconds:Math.max(5,Math.round((Date.now()-start)/1000)),time:nowString(),mode});
+      target.querySelectorAll(".option").forEach((b,i)=>{
+        b.disabled=true;if(i===q.answer)b.classList.add("correct");if(i===selected&&!correct)b.classList.add("wrong");
+      });
+      $("explainBox").innerHTML=`<div class="explanation"><b>${correct?"回答正确":"这道题需要复习"}</b><br>${esc(q.explanation)}</div>`;
+      $("submitAnswer").textContent=session.index===session.questions.length-1?"查看结果":"下一题";
+      saveData();renderAll();
+    });
+    $("quitQuiz").addEventListener("click",()=>{
+      if(mode==="diagnosis"){target.classList.add("hide");$("diagnosisIntro").classList.remove("hide");}
+      else{target.classList.add("hide");$("practiceSetup").classList.remove("hide");}
+    });
+  }
+
+  function startSession(type){
+    let pool=data.questions.filter(q=>q.semester===data.profile.term),count;
+    if(type==="diagnosis"){
+      const sub=$("diagSubject").value;count=Number($("diagCount").value);
+      if(sub!=="all")pool=pool.filter(q=>q.subject===sub);
+      activeSession={questions:shuffle(pool).slice(0,count),index:0,score:0,wrongAdded:0};
+      $("diagnosisIntro").classList.add("hide");$("diagnosisArea").classList.remove("hide");
+      renderQuestionArea("diagnosisArea",activeSession,"diagnosis");
+    }else{
+      const sub=$("practiceSubject").value,know=$("practiceKnowledge").value,diff=$("practiceDifficulty").value;
+      count=Number($("practiceCount").value);
+      if(sub!=="all")pool=pool.filter(q=>q.subject===sub);
+      if(know!=="all")pool=pool.filter(q=>q.knowledge===know);
+      if(diff!=="all")pool=pool.filter(q=>q.difficulty===diff);
+      if(!pool.length){toast("没有符合条件的题目");return}
+      let q=[];while(q.length<count){q.push(...shuffle(pool));}q=q.slice(0,count);
+      activeSession={questions:q,index:0,score:0,wrongAdded:0};
+      $("practiceSetup").classList.add("hide");$("practiceArea").classList.remove("hide");
+      renderQuestionArea("practiceArea",activeSession,"practice");
+    }
+  }
+
+  function renderWrong(){
+    const filter=$("wrongFilter").value;
+    const items=Object.values(data.wrong).filter(w=>filter==="all"||(filter==="mastered"?w.mastered:!w.mastered));
+    $("wrongList").innerHTML=items.map(w=>{
+      const q=data.questions.find(x=>x.id==w.qid);if(!q)return "";
+      return `<div class="wrong-card">
+        <div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start">
+          <div><span class="chip">${esc(q.subject)} · ${esc(q.knowledge)}</span><h4>${esc(q.stem)}</h4></div>
+          <span class="status ${w.mastered?"ok":"bad"}">${w.mastered?"已掌握":"待复习"}</span>
+        </div>
+        <p>正确答案：${"ABCD"[q.answer]}．${esc(q.options[q.answer])}</p>
+        <p>解析：${esc(q.explanation)}</p>
+        <p>错误次数：${w.attempts} · 最近错误：${esc(w.lastWrong||"-")}</p>
+        <div class="wrong-actions">
+          <button class="ghost-btn wrong-toggle" data-id="${q.id}">${w.mastered?"重新加入复习":"标记为已掌握"}</button>
+          <button class="ghost-btn wrong-practice" data-id="${q.id}">练习本题</button>
+        </div>
+      </div>`;
+    }).join("") || `<div class="card empty">当前没有符合条件的错题。</div>`;
+    document.querySelectorAll(".wrong-toggle").forEach(b=>b.addEventListener("click",()=>{
+      data.wrong[b.dataset.id].mastered=!data.wrong[b.dataset.id].mastered;saveData();renderWrong();renderAll();
+    }));
+    document.querySelectorAll(".wrong-practice").forEach(b=>b.addEventListener("click",()=>{
+      const q=data.questions.find(x=>x.id==b.dataset.id);activeSession={questions:[q],index:0,score:0,wrongAdded:0};
+      showPage("student-practice");$("practiceSetup").classList.add("hide");$("practiceArea").classList.remove("hide");
+      renderQuestionArea("practiceArea",activeSession,"practice");
+    }));
+  }
+
+  function localTutor(text){
+    const t=text.toLowerCase();
+    const matched=data.questions.find(q=>t.includes(q.knowledge.toLowerCase())||t.includes(q.stem.toLowerCase().slice(0,8))||q.options.some(o=>String(o).length>1&&t.includes(String(o).toLowerCase())));
+    if(/同类题|再出一题|出一道/.test(text)){
+      const pool=matched?data.questions.filter(q=>q.knowledge===matched.knowledge&&q.id!==matched.id):data.questions;
+      const q=shuffle(pool)[0];
+      return q?`给你一道同类练习：\n\n${q.stem}\nA. ${q.options[0]}\nB. ${q.options[1]}\nC. ${q.options[2]}\nD. ${q.options[3]}\n\n先独立作答，再到“智能练习”中核对。`:"暂时没有匹配到同类题。";
+    }
+    if(matched){
+      return `先不要急着看答案。\n\n【知识点】${matched.subject} · ${matched.knowledge}\n【提示】先判断题目要求，再找已知条件。\n【步骤】${matched.explanation}\n【总结】这类题要特别注意：${matched.difficulty==="基础"?"基本概念和计算顺序":"条件变化与方法选择"}。`;
+    }
+    if(/乘法|相乘|×/.test(t)) return "三年级乘法可以先把大数拆开。例如125×4，可以想成100×4+20×4+5×4。列竖式时，从个位乘起，满几十就向前一位进几。";
+    if(/除法|平均分|÷/.test(t)) return "先判断是“平均分成几份”还是“每份有几个”。除法验算可以用商×除数，看是否等于被除数。";
+    if(/schoolbag|书包|学习用品/.test(t)) return "schoolbag 是“书包”。可以这样记：school（学校）+ bag（包）= schoolbag。句型：This is my schoolbag.";
+    if(/颜色|colour|color|red|blue|green/.test(t)) return "颜色词可以放在名词前面：a red bag、a blue pencil。问颜色用 What colour is it? 回答 It is...";
+    return "我暂时没有准确匹配到题目。请把题干、选项或具体知识点写完整一些。我会按照“已知条件—解题步骤—易错点”帮助你分析。";
+  }
+
+  function addMessage(type,text){
+    const div=document.createElement("div");div.className=`msg ${type}`;div.textContent=text;$("messages").appendChild(div);$("messages").scrollTop=$("messages").scrollHeight;
+  }
+
+  function renderReports(){
+    const s=stats(),m=masteryMap();
+    $("studentReportSummary").innerHTML=`
+      <div class="report-box"><small>累计答题</small><strong>${s.attempts}题</strong></div>
+      <div class="report-box"><small>平均正确率</small><strong>${s.accuracy}%</strong></div>
+      <div class="report-box"><small>待复习错题</small><strong>${s.pending}题</strong></div>`;
+    const entries=Object.entries(m).sort((a,b)=>a[1].rate-b[1].rate);
+    $("masteryBars").innerHTML=entries.map(([k,v])=>`<div class="bar-row"><span>${esc(k)}</span><div class="bar"><span style="width:${v.rate}%"></span></div><b>${v.rate}%</b></div>`).join("");
+    const weak=entries.slice(0,3);
+    $("studyAdvice").innerHTML=weak.length?`<p><b>优先复习：</b>${weak.map(x=>x[0]).join("、")}。</p><p><b>建议顺序：</b>先看概念与例题，再完成3—5道同类题，最后回到错题本复测。</p><p><b>学习节奏：</b>单次学习控制在${data.controls.sessionLimit}分钟左右，每${data.controls.breakEvery}分钟主动休息。</p>`:"<p>完成诊断测试后会生成针对性建议。</p>";
+    $("historyTable").innerHTML=data.history.slice(0,20).map(h=>`<tr><td>${esc(h.time)}</td><td>${esc(h.subject)}</td><td>${esc(h.knowledge)}</td><td><span class="status ${h.correct?"ok":"bad"}">${h.correct?"正确":"错误"}</span></td><td>${h.seconds||0}秒</td></tr>`).join("")||`<tr><td colspan="5" class="empty">暂无答题记录</td></tr>`;
+
+    $("parentHero").textContent=`${data.profile.name}的学习概览`;
+    $("parentSummary").innerHTML=`
+      <div class="report-box"><small>累计学习</small><strong>${s.minutes}分钟</strong></div>
+      <div class="report-box"><small>答题正确率</small><strong>${s.accuracy}%</strong></div>
+      <div class="report-box"><small>计划完成</small><strong>${s.taskDone}/${data.tasks.length}</strong></div>`;
+    $("weakBars").innerHTML=weak.map(([k,v])=>`<div class="bar-row"><span>${esc(k)}</span><div class="bar"><span style="width:${v.rate}%"></span></div><b>${v.rate}%</b></div>`).join("")||`<div class="empty">暂无足够数据</div>`;
+    $("parentAdvice").innerHTML=`<p><b>本周关注：</b>${weak.length?weak.map(x=>x[0]).join("、"):"先完成一次诊断测试"}。</p><p><b>陪伴方式：</b>让孩子先说出自己的思路，再讨论错误原因，不直接代替解题。</p><p><b>时间建议：</b>家庭约定学习时段为 ${esc(data.controls.start)}—${esc(data.controls.end)}，单次不超过${data.controls.sessionLimit}分钟。</p>`;
+  }
+
+  function renderAdmin(){
+    const s=stats(),k=new Set(data.questions.map(q=>q.knowledge));
+    $("adminQuestionCount").textContent=data.questions.length;
+    $("adminKnowledgeCount").textContent=k.size;
+    $("adminHistoryCount").textContent=s.attempts;
+    $("adminWrongCount").textContent=s.pending;
+    $("questionTable").innerHTML=data.questions.map(q=>`<tr><td>${q.id}</td><td>${esc(q.semester||"上册")}</td><td>${esc(q.subject)}</td><td>${esc(q.knowledge)}</td><td>${esc(q.difficulty)}</td><td>${esc(q.stem)}</td><td><button class="danger-btn q-delete" data-id="${q.id}" style="padding:7px 10px">删除</button></td></tr>`).join("");
+    document.querySelectorAll(".q-delete").forEach(b=>b.addEventListener("click",()=>{
+      if(!confirm("确定删除这道题吗？"))return;
+      data.questions=data.questions.filter(q=>q.id!=b.dataset.id);delete data.wrong[b.dataset.id];saveData();renderAll();
+    }));
+    $("profileName").value=data.profile.name;$("profileGrade").value="三年级";$("profileTerm").value=data.profile.term||"上册";$("profileClass").value=data.profile.className||"";
+  }
+
+  function renderPracticeFilters(){
+    const current=$("practiceSubject").value;
+    const subjects=["all",...new Set(data.questions.filter(q=>q.semester===data.profile.term).map(q=>q.subject))];
+    $("practiceSubject").innerHTML=subjects.map(s=>`<option value="${esc(s)}">${s==="all"?"全部学科":esc(s)}</option>`).join("");
+    if(subjects.includes(current))$("practiceSubject").value=current;
+    updateKnowledgeOptions();
+  }
+
+  function updateKnowledgeOptions(){
+    const sub=$("practiceSubject").value;
+    const ks=[...new Set(data.questions.filter(q=>q.semester===data.profile.term&&(sub==="all"||q.subject===sub)).map(q=>q.knowledge))];
+    $("practiceKnowledge").innerHTML=`<option value="all">全部知识点</option>`+ks.map(k=>`<option value="${esc(k)}">${esc(k)}</option>`).join("");
+  }
+
+
+  let listenState = null;
+  function speakEnglish(text){
+    if(!("speechSynthesis" in window)){toast("当前浏览器不支持语音朗读");return}
+    window.speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(text);
+    u.lang="en-US";u.rate=.82;u.pitch=1.05;
+    window.speechSynthesis.speak(u);
+  }
+
+  function newListenChallenge(){
+    const units=englishUnits[data.profile.term]||[];
+    const words=units.flatMap(u=>u.words.map(w=>({en:w[0],zh:w[1]})));
+    if(words.length<4)return;
+    const target=shuffle(words)[0];
+    const others=shuffle(words.filter(w=>w.en!==target.en)).slice(0,3);
+    listenState={target,options:shuffle([target,...others])};
+    renderListenChallenge();
+  }
+
+  function renderListenChallenge(){
+    const box=$("listenChallenge");if(!box)return;
+    if(!listenState){newListenChallenge();return}
+    box.innerHTML=`<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+      <button class="primary-btn" id="playListenWord">▶ 播放单词</button>
+      <span style="color:var(--muted)">听清楚后选择正确的英文单词</span>
+    </div>
+    <div class="listen-options">
+      ${listenState.options.map(w=>`<button class="option listen-choice" data-word="${esc(w.en)}">${esc(w.en)}</button>`).join("")}
+    </div>
+    <div id="listenFeedback" aria-live="polite"></div>`;
+    $("playListenWord").addEventListener("click",()=>speakEnglish(listenState.target.en));
+    document.querySelectorAll(".listen-choice").forEach(b=>b.addEventListener("click",()=>{
+      const ok=b.dataset.word===listenState.target.en;
+      document.querySelectorAll(".listen-choice").forEach(x=>x.disabled=true);
+      b.classList.add(ok?"correct":"wrong");
+      $("listenFeedback").innerHTML=`<div class="explanation"><b>${ok?"答对了！":"再听一遍就会了。"}</b><br>正确答案：${esc(listenState.target.en)}，中文意思是“${esc(listenState.target.zh)}”。 <button class="ghost-btn" id="nextListen" style="margin-left:8px">下一题</button></div>`;
+      $("nextListen").addEventListener("click",newListenChallenge);
+    }));
+  }
+
+  function renderEnglish(){
+    const grid=$("englishUnitGrid");if(!grid)return;
+    const units=englishUnits[data.profile.term]||[];
+    $("englishTermBadge").textContent=`三年级${data.profile.term}`;
+    grid.innerHTML=units.map((u,ui)=>`<article class="word-unit">
+      <h4>${esc(u.unit)}</h4>
+      <div class="word-chips">
+        ${u.words.map(w=>`<button class="word-btn speak-word" data-text="${esc(w[0])}"><b>🔊 ${esc(w[0])}</b><small>${esc(w[1])}</small></button>`).join("")}
+      </div>
+      <button class="sentence-box speak-word" data-text="${esc(u.sentence)}" style="width:100%;border:0;color:var(--text);text-align:left">🔊 <b>${esc(u.sentence)}</b></button>
+    </article>`).join("");
+    document.querySelectorAll(".speak-word").forEach(b=>b.addEventListener("click",()=>speakEnglish(b.dataset.text)));
+    listenState=null;newListenChallenge();
+  }
+
+  function renderControls(){
+    $("controlStart").value=data.controls.start;$("controlEnd").value=data.controls.end;
+    $("sessionLimit").value=data.controls.sessionLimit;$("breakEvery").value=data.controls.breakEvery;
+  }
+
+  function renderAll(){
+    document.documentElement.dataset.theme=data.theme;
+    $("termSwitch").value=data.profile.term||"上册";renderHome();renderWrong();renderReports();renderAdmin();renderPracticeFilters();renderControls();renderEnglish();
+  }
+
+  document.querySelectorAll(".role-switch button").forEach(b=>b.addEventListener("click",()=>setRole(b.dataset.role)));
+  document.addEventListener("click",e=>{
+    const go=e.target.closest("[data-go]");if(go)showPage(go.dataset.go);
+    const close=e.target.closest("[data-close]");if(close)$(close.dataset.close).classList.remove("show");
+  });
+  $("mobileMenu").addEventListener("click",()=>$("sidebar").classList.toggle("open"));
+  $("termSwitch").addEventListener("change",()=>{data.profile.term=$("termSwitch").value;saveData();activeSession=null;renderAll();toast(`已切换到三年级${data.profile.term}`)});
+  $("themeBtn").addEventListener("click",()=>{data.theme=data.theme==="dark"?"light":"dark";saveData();renderAll()});
+  $("profileBtn").addEventListener("click",()=>{setRole("admin");showPage("admin-settings")});
+  $("startDiagnosis").addEventListener("click",()=>startSession("diagnosis"));
+  $("startPractice").addEventListener("click",()=>startSession("practice"));
+  $("practiceSubject").addEventListener("change",updateKnowledgeOptions);
+  $("wrongFilter").addEventListener("change",renderWrong);
+  $("reviewWrong").addEventListener("click",()=>{
+    const qs=Object.values(data.wrong).filter(w=>!w.mastered).map(w=>data.questions.find(q=>q.id==w.qid)).filter(Boolean);
+    if(!qs.length){toast("当前没有待复习错题");return}
+    activeSession={questions:shuffle(qs),index:0,score:0,wrongAdded:0};
+    showPage("student-practice");$("practiceSetup").classList.add("hide");$("practiceArea").classList.remove("hide");
+    renderQuestionArea("practiceArea",activeSession,"practice");
+  });
+  $("sendChat").addEventListener("click",()=>{
+    const text=$("chatText").value.trim();if(!text)return;
+    addMessage("user",text);$("chatText").value="";
+    setTimeout(()=>addMessage("ai",localTutor(text)),180);
+  });
+  $("chatText").addEventListener("keydown",e=>{if(e.ctrlKey&&e.key==="Enter")$("sendChat").click()});
+  $("speakAllSentence").addEventListener("click",()=>{const units=englishUnits[data.profile.term]||[];speakEnglish(units.map(u=>u.sentence).join(". "))});
+  $("clearChat").addEventListener("click",()=>{
+    $("messages").innerHTML='<div class="msg ai">对话已清空。请继续输入你的学习问题。</div>';
+  });
+  $("addTaskBtn").addEventListener("click",()=>$("taskModal").classList.add("show"));
+  $("saveNewTask").addEventListener("click",()=>{
+    const name=$("newTaskName").value.trim();if(!name){toast("请输入任务名称");return}
+    data.tasks.push({id:Date.now(),name,subject:$("newTaskSubject").value,minutes:Number($("newTaskMinutes").value)||15,done:false});
+    $("newTaskName").value="";$("taskModal").classList.remove("show");saveData();renderAll();toast("任务已添加");
+  });
+  $("saveControls").addEventListener("click",()=>{
+    data.controls={start:$("controlStart").value.trim()||"18:30",end:$("controlEnd").value.trim()||"20:30",sessionLimit:Number($("sessionLimit").value)||45,breakEvery:Number($("breakEvery").value)||30};
+    saveData();renderAll();toast("学习管理设置已保存");
+  });
+  $("printReport").addEventListener("click",()=>window.print());
+  $("addQuestionBtn").addEventListener("click",()=>$("questionModal").classList.add("show"));
+  $("saveQuestion").addEventListener("click",()=>{
+    const fields=["qSubject","qKnowledge","qStem","qA","qB","qC","qD","qExplanation"];
+    if(fields.some(id=>!$(id).value.trim())){toast("请完整填写题目信息");return}
+    data.questions.push({
+      id:Math.max(0,...data.questions.map(q=>Number(q.id)||0))+1,
+      semester:$("qSemester").value,subject:$("qSubject").value.trim(),knowledge:$("qKnowledge").value.trim(),difficulty:$("qDifficulty").value,
+      stem:$("qStem").value.trim(),options:[$("qA").value.trim(),$("qB").value.trim(),$("qC").value.trim(),$("qD").value.trim()],
+      answer:Number($("qAnswer").value),explanation:$("qExplanation").value.trim()
+    });
+    fields.forEach(id=>$(id).value="");$("questionModal").classList.remove("show");saveData();renderAll();toast("题目已保存");
+  });
+  $("exportQuestions").addEventListener("click",()=>downloadFile("智学伴题库.json",JSON.stringify(data.questions,null,2)));
+  $("importQuestionsBtn").addEventListener("click",()=>$("importQuestionsFile").click());
+  $("importQuestionsFile").addEventListener("change",async e=>{
+    const file=e.target.files[0];if(!file)return;
+    try{
+      const arr=JSON.parse(await file.text());
+      if(!Array.isArray(arr))throw new Error();
+      data.questions=arr.map(q=>({...q,semester:q.semester||data.profile.term}));saveData();renderAll();toast("题库导入成功");
+    }catch(err){alert("题库文件格式不正确。")}
+    e.target.value="";
+  });
+  $("saveProfile").addEventListener("click",()=>{
+    data.profile={name:$("profileName").value.trim()||"小江",grade:"三年级",className:$("profileClass").value.trim(),term:$("profileTerm").value};
+    saveData();renderAll();toast("学生资料已保存");
+  });
+  $("exportAll").addEventListener("click",()=>downloadFile("智学伴全部数据备份.json",JSON.stringify(data,null,2)));
+  $("importAllBtn").addEventListener("click",()=>$("importAllFile").click());
+  $("importAllFile").addEventListener("change",async e=>{
+    const file=e.target.files[0];if(!file)return;
+    try{
+      const obj=JSON.parse(await file.text());if(!obj.questions||!obj.profile)throw new Error();
+      data=obj;saveData();renderAll();toast("全部数据导入成功");
+    }catch(err){alert("备份文件格式不正确。")}
+    e.target.value="";
+  });
+  $("resetAll").addEventListener("click",()=>{
+    if(!confirm("这会清除当前浏览器中的全部学习记录，确定继续吗？"))return;
+    data=freshData();saveData();setRole("student");renderAll();toast("已恢复初始数据");
+  });
+
+  renderNav();
+  renderAll();
+})();
+</script>
+</body>
+</html>
